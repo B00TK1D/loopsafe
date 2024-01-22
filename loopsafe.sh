@@ -1,6 +1,6 @@
 #!/bin/sh
 
-if [ $# -ne 2 ] || [ $# -ne 3]; then
+if [ $# -ne 2 ] || [ $# -ne 3 ]; then
     echo "Invalid arguments provided."
     echo "Usage: $0 <original_port> <new_port> [remote_host]"
     exit 1
