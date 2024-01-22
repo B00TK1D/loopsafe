@@ -1,6 +1,6 @@
 #!/bin/sh
 
-if [ $# -ne 4 ]; then
+if [ $# -ne 3 ]; then
     echo "Invalid arguments provided."
     echo "Usage: $0 <local_port> <remote_ip> <remote_port>"
     exit 1
