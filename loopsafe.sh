@@ -29,7 +29,7 @@ while true; do
         if [ $FORWORDING_ENABLED -ne 1 ]; then
             echo "Remote connection to $3:$2 is up. Enabling port forwarding..."
             if [ $# -eq 3 ]; then
-                nc -lkp $2 -e nc $REMOTE_HOST $2 &
+                nc -lkp $2 -e nc $REMOTE_HOST $2 2>/dev/null &
                 PROXY_PID=$!
             fi
             iptables -A PREROUTING -t nat -p tcp --dport $1 -j REDIRECT --to-port $2 2>/dev/null
