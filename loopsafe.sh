@@ -6,7 +6,7 @@ if [ $# -ne 2 ]; then
     exit 1
 fi
 
-FORWORDING_ENABLED=0
+FORWORDING_ENABLED=2
 while true; do
     nc -z 127.0.0.1 $2
     if [ $? -eq 1 ]; then
