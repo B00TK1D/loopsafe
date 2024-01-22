@@ -6,7 +6,7 @@ if [ $# -ne 2 ]; then
     exit 1
 fi
 
-trap 'iptables -D PREROUTING -t nat -p tcp --dport $1 -j REDIRECT --to-port $2 2>/dev/null; exit' SIGKILL SIGINT SIGTERM
+trap 'iptables -D PREROUTING -t nat -p tcp --dport $1 -j REDIRECT --to-port $2 2>/dev/null; echo "Disabling port forwarding and exiting"; exit' SIGKILL SIGINT SIGTERM
 
 FORWORDING_ENABLED=2
 while true; do
