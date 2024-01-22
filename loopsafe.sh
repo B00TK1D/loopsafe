@@ -16,7 +16,9 @@ while true; do
         if [ $FORWORDING_ENABLED -ne 0 ]; then
             echo "Remote connection to $2:$3 is down. Disabling port forwarding..."
             iptables -D PREROUTING -t nat -p tcp --dport $1 -j REDIRECT --to-port $2 2>/dev/null
-            kill $PROXY_PID 2>/dev/null
+            if [ $PROXY_PID -ne 0 ]; then
+                kill $PROXY_PID 2>/dev/null
+            fi
             FORWORDING_ENABLED=0
         fi
     else
