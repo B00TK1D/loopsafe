@@ -26,4 +26,5 @@ while true; do
             FORWORDING_ENABLED=1
         fi
     fi
+    sleep 1
 done
