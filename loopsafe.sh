@@ -8,7 +8,7 @@ fi
 
 FORWORDING_ENABLED=0
 while true; do
-    nc -z 127.0.0.1 $3
+    nc -z 127.0.0.1 $2
     if [ $? -eq 1 ]; then
         if [ $FORWORDING_ENABLED -eq 1 ]; then
             echo "Remote connection to $2:$3 is down. Disabling port forwarding..."
