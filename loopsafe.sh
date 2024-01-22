@@ -11,10 +11,14 @@ trap 'iptables -D PREROUTING -t nat -p tcp --dport $1 -j REDIRECT --to-port $2 2
 FORWORDING_ENABLED=2
 PROXY_PID=0
 while true; do
-    nc -z 127.0.0.1 $2
+    if [ $# -eq 3 ]; then
+        nc -z $3 $2
+    else
+        nc -z 127.0.0.1 $2
+    fi
     if [ $? -eq 1 ]; then
         if [ $FORWORDING_ENABLED -ne 0 ]; then
-            echo "Remote connection to $2:$3 is down. Disabling port forwarding..."
+            echo "Remote connection to $3:$2 is down. Disabling port forwarding..."
             iptables -D PREROUTING -t nat -p tcp --dport $1 -j REDIRECT --to-port $2 2>/dev/null
             if [ $PROXY_PID -ne 0 ]; then
                 kill $PROXY_PID 2>/dev/null
