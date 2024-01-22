@@ -12,13 +12,13 @@ while true; do
     if [ $? -eq 1 ]; then
         if [ $FORWORDING_ENABLED -eq 1 ]; then
             echo "Remote connection to $2:$3 is down. Disabling port forwarding..."
-            iptables -A PREROUTING -t nat -p tcp --dport $1 -j REDIRECT --to-port $2
+            iptables -D PREROUTING -t nat -p tcp --dport $1 -j REDIRECT --to-port $2
             FORWORDING_ENABLED=0
         fi
     else
         if [ $FORWORDING_ENABLED -eq 0 ]; then
             echo "Remote connection to $2:$3 is up. Enabling port forwarding..."
-            iptables -D PREROUTING -t nat -p tcp --dport $1 -j REDIRECT --to-port $2
+            iptables -A PREROUTING -t nat -p tcp --dport $1 -j REDIRECT --to-port $2
             FORWORDING_ENABLED=1
         fi
     fi
