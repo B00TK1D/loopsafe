@@ -6,12 +6,6 @@ if [ $# -ne 2 ] && [ $# -ne 3 ]; then
     exit 1
 fi
 
-trap 'iptables -D PREROUTING -t nat -p tcp --dport $1 -j REDIRECT --to-port $2 2>/dev/null; echo -e "\nDisabling port forwarding and exiting"; exit' SIGKILL 2>/dev/null
-trap 'iptables -D PREROUTING -t nat -p tcp --dport $1 -j REDIRECT --to-port $2 2>/dev/null; echo -e "\nDisabling port forwarding and exiting"; exit' SIGNINT 2>/dev/null
-trap 'iptables -D PREROUTING -t nat -p tcp --dport $1 -j REDIRECT --to-port $2 2>/dev/null; echo -e "\nDisabling port forwarding and exiting"; exit' SIGTERM 2>/dev/null
-
-
-
 FORWORDING_ENABLED=2
 PROXY_PID=0
 PROXY_PORT=$2
