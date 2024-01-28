@@ -4,5 +4,6 @@ Redirect TCP traffic to a different place, but immediately fall back to the orig
 
 # Usage
 ```
-sh loopsafe.sh <local_port> <remote_host> <remote_port>
+git clone https://github.com/B00TK1D/loopsafe.git
+sh loopsafe/loopsafe.sh <local_port> <remote_host> <remote_port>
 ```
