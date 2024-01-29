@@ -5,5 +5,5 @@ Redirect TCP traffic to a different place, but immediately fall back to the orig
 # Usage
 ```
 git clone https://github.com/B00TK1D/loopsafe.git
-sh loopsafe/loopsafe.sh <local_port> <remote_host> <remote_port>
+sh loopsafe/loopsafe.sh <original_port> <new_port> [remote_host]
 ```
