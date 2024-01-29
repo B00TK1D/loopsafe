@@ -14,9 +14,9 @@ if [ $# -eq 3 ]; then
     REMOTE_HOST=$3
 fi
 
-trap 'iptables -D PREROUTING -t nat -p tcp ! -s $REMOTE_HOST --dport $1 -j REDIRECT --to-port $2 2>/dev/null; echo -e "\nDisabling port forwarding and exiting"; exit' SIGKILL 2>/dev/null
-trap 'iptables -D PREROUTING -t nat -p tcp ! -s $REMOTE_HOST --dport $1 -j REDIRECT --to-port $2 2>/dev/null; echo -e "\nDisabling port forwarding and exiting"; exit' SIGNINT 2>/dev/null
-trap 'iptables -D PREROUTING -t nat -p tcp ! -s $REMOTE_HOST --dport $1 -j REDIRECT --to-port $2 2>/dev/null; echo -e "\nDisabling port forwarding and exiting"; exit' SIGTERM 2>/dev/null
+trap 'iptables -D PREROUTING -t nat -p tcp ! -s $REMOTE_HOST --dport $1 -j REDIRECT --to-port $2 2>/dev/null; rm /tmp/.loopsafe-port-$$ 2>/dev/null; rm /tmp/.loopsafe-pipe-$$ 2>/dev/null; echo -e "\nDisabling port forwarding and exiting"; exit' SIGKILL 2>/dev/null
+trap 'iptables -D PREROUTING -t nat -p tcp ! -s $REMOTE_HOST --dport $1 -j REDIRECT --to-port $2 2>/dev/null; rm /tmp/.loopsafe-port-$$ 2>/dev/null; rm /tmp/.loopsafe-pipe-$$ 2>/dev/null; echo -e "\nDisabling port forwarding and exiting"; exit' SIGNINT 2>/dev/null
+trap 'iptables -D PREROUTING -t nat -p tcp ! -s $REMOTE_HOST --dport $1 -j REDIRECT --to-port $2 2>/dev/null; rm /tmp/.loopsafe-port-$$ 2>/dev/null; rm /tmp/.loopsafe-pipe-$$ 2>/dev/null; echo -e "\nDisabling port forwarding and exiting"; exit' SIGTERM 2>/dev/null
 
 while true; do
     nc -z $REMOTE_HOST $2
@@ -27,6 +27,8 @@ while true; do
             if [ $PROXY_PID -ne 0 ]; then
                 kill $PROXY_PID 2>/dev/null
             fi
+            rm /tmp/.loopsafe-port-$$ 2>/dev/null
+            rm /tmp/.loopsafe-pipe-$$ 2>/dev/null
             FORWORDING_ENABLED=0
         fi
     else
@@ -34,9 +36,11 @@ while true; do
             echo "Remote connection to $3:$2 is up. Enabling port forwarding..."
             if [ $# -eq 3 ]; then
                 PROXY_PORT="0"
-                nc -lkp $2 -e nc $REMOTE_HOST $2 2>/tmp/.loopsafe-proxy &
+                mkfifo /tmp/.loopsafe-port-$$
+                mkfifo /tmp/.loopsafe-pipe-$$
+                cat /tmp/.loopsafe-pipe-$$ | nc $REMOTE_HOST $2 | nc -lkvp 0 > /tmp/.loopsafe-pipe-$$ 2>/tmp/.loopsafe-port-$$
                 while [ "$PROXY_PORT" -eq "0" ]; do
-                    PROXY_PORT=$(head -n 1 /tmp/.loopsafe-proxy | cut -d' ' -f4)
+                    PROXY_PORT=$(head -n 1 /tmp/.loopsafe-port-$$ | cut -d' ' -f4)
                 done
                 PROXY_PID=$!
             fi
