@@ -33,9 +33,9 @@ while true; do
         if [ $FORWORDING_ENABLED -ne 1 ]; then
             echo "Remote connection to $3:$2 is up. Enabling port forwarding..."
             if [ $# -eq 3 ]; then
-                PROXY_PORT='0'
+                PROXY_PORT=''
                 nc -lkp $2 -e nc $REMOTE_HOST $2 2>/tmp/.loopsafe-proxy &
-                while [ $PROXY_PORT -eq 0 ]; do
+                while [[ $PROXY_PORT == "" ]]; do
                     PROXY_PORT=$(head -n 1 /tmp/.loopsafe-proxy | cut -d' ' -f4)
                 done
                 PROXY_PID=$!
