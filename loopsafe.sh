@@ -35,7 +35,7 @@ while true; do
             if [ $# -eq 3 ]; then
                 PROXY_PORT=''
                 nc -lkp $2 -e nc $REMOTE_HOST $2 2>/tmp/.loopsafe-proxy &
-                while [[ $PROXY_PORT == "" ]]; do
+                while [ $PROXY_PORT == "" ]; do
                     PROXY_PORT=$(head -n 1 /tmp/.loopsafe-proxy | cut -d' ' -f4)
                 done
                 PROXY_PID=$!
